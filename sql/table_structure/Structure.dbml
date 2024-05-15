@@ -1,0 +1,184 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+// https://dbdiagram.io/d/Database-6630c8e15b24a634d029c662
+
+Table product {
+  id bigserial [primary key]
+
+  is_active bool
+
+  article uuid [ref: > product_info.article]
+
+  price decimal
+  currency_code varchar(3) [ref: > currency.code]
+
+  quantity integer
+
+  employee_to_role_id integer [ref: > employee_to_role.id]
+  product_group_id integer [ref: > product_group.id]
+}
+
+Table product_info {
+  article uuid [primary key]
+
+  name varchar(255)
+  certificate_number varchar(255)
+  packaging varchar(255)
+  company_name varchar(255)
+}
+
+Table product_group {
+  id integer [primary key]
+
+  name varchar(255)
+  description text
+
+  parent_product_group_id integer [ref: > product_group.id]
+}
+
+enum product_document_type {
+  SALE
+  REFUND
+}
+
+// TODO add product_document с
+// зафиксированной ценой ref on product
+Table user_item {
+  id uuid
+  product_article uuid [ref: > product_info.article]
+  quantity integer
+  cart integer [ref: > user_cart.id]
+}
+
+Table user_cart {
+  id serial
+  date timestamp
+  organization_id uuid [ref: > organization.id]
+  invoice integer [ref: - invoice.id]
+}
+
+
+
+// Товарный документ
+Table product_document {
+  id uuid [primary key]
+
+  type product_document_type
+
+  date timestamp
+  //currency_code varchar(3)
+
+  product_id uuid [ref: > product.id]
+  quantity integer
+
+  exchange_rate_id integer [ref: > exchange_rate.id]
+
+  employee_to_role_id integer [ref: > employee_to_role.id]
+  //organization_id uuid [ref: > organization.id]
+
+  invoice_id integer [ref: > invoice.id]
+}
+
+enum payment_order_type {
+  INCOMING
+  OUTCOMING
+}
+
+// Платежное поручение
+Table payment_order {
+  id uuid [primary key]
+
+  processed bool
+
+  date timestamp
+  type payment_order_type
+
+  total_sum decimal
+  currency_code varchar(3) [ref: > currency.code]
+
+  bank_id varchar(255)
+  employee_to_role_id integer [ref: > employee_to_role.id]
+}
+
+Table organization {
+  id uuid [primary key]
+
+  name varchar(255)
+
+  address varchar(255)
+  category varchar(255)
+  license_number varchar(255)
+  phone_number varchar(128)
+  bank_details varchar(255)
+}
+
+Table employee {
+  id serial [primary key]
+
+  full_name varchar(255)
+
+  supervisor_id serial [ref: > employee.id]
+}
+
+enum sex_type {
+  MALE
+  FEMALE
+  OTHER
+}
+
+Table employee_info {
+  employee_id integer [primary key, ref: - employee.id]
+
+  iin varchar(128)
+  pasport varchar(128)
+  date_of_birth timestamp
+
+  sex sex_type
+
+  phone_number varchar(128)
+
+  login varchar(255)
+  password varchar(255)
+}
+
+Table role {
+  id integer [primary key]
+  name varchar(128)
+}
+
+
+Table employee_to_role {
+  id serial [primary key]
+  role_id integer [ref: > role.id]
+  employee_id integer [ref: - employee.id]
+  date_of_admission date
+  date_of_dismissal date
+  salary decimal
+}
+
+Table currency {
+  code varchar(3) [primary key]
+
+  country varchar(255)
+  description varchar(255)
+}
+
+Table exchange_rate {
+  id serial [primary key]
+
+  source_currency varchar(3) [ref: > currency.code]
+  target_currency varchar(3) [ref: > currency.code]
+
+  date timestamp
+
+  value decimal
+}
+
+Table invoice {
+  id serial [primary key]
+  date timestamp
+  currency_code varchar(3) [ref: > currency.code]
+  organization_id uuid [ref: - organization.id]
+  payment_order_id uuid [ref: - payment_order.id]
+}
+
