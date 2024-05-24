@@ -1,44 +1,42 @@
 Table product {
-  id serial [primary key]
+  id uuid [primary key]
 
-  name varchar(255) 
+  name varchar(255)
   company_name varchar(255)
   price decimal
-  quantity integer 
+  quantity integer
 
-  employee_to_role_id integer [ref: > employee_to_role.id]
+  employee_to_role_id uuid [ref: > employee_to_role.id]
 }
 
 Table employee_to_role {
-  id serial [primary key]
-  role_id integer [ref: > role.id]
-  employee_id integer [ref: < employee.id]
+  id uuid [primary key]
+  role_id uuid [ref: > role.id]
+  employee_id uuid [ref: > employee.id]
   date_of_admission date
   date_of_dismissal date
   salary decimal
 }
 
 Table employee {
-  id serial [primary key]
+  id uuid [primary key]
 
   full_name varchar(255)
 
-  supervisor_id serial [ref: > employee.id]
+  supervisor_id uuid [ref: > employee.id]
 }
 
 Table role {
-  id integer [primary key]
+  id uuid [primary key]
   name varchar(128)
 }
 
 Table employee_info {
-  employee_id integer [primary key, ref: - employee.id]
+  employee_id uuid [primary key, ref: - employee.id]
 
   iin varchar(128)
   pasport varchar(128)
   date_of_birth timestamp
-
-  sex sex_type
 
   phone_number varchar(128)
 
@@ -49,20 +47,18 @@ Table employee_info {
 Table payment_order {
   id uuid [primary key]
 
-  processed bool
-
   date timestamp
 
   total_sum decimal
-  
-  bank_id varchar(255)  
-  employee_to_role_id integer [ref: > employee_to_role.id]
+
+  bank_id varchar(255)
+  employee_to_role_id uuid [ref: > employee_to_role.id]
 }
 
 Table order_item {
   id uuid [primary key]
-  payment_id integer [ref: < payment_order.id]
-  product_id integer [ref: < product.id]
+  payment_id uuid [ref: > payment_order.id]
+  product_id uuid [ref: > product.id]
   quantity integer
 }
 
