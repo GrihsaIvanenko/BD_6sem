@@ -6,4 +6,4 @@ FROM tmp
 JOIN employee_to_role ON tmp.employee_to_role_id = employee_to_role.id)
 SELECT full_name
 FROM tmptmp
-JOIN employee ON tmptmp.employee_id = employee.id
+JOIN employee ON tmptmp.employee_id = employee.id;

@@ -6,11 +6,4 @@ FROM tmp
 JOIN employee ON tmp.employee_id = employee.id)
 SELECT full_name
 FROM tmptmp
-JOIN employee_info on tmptmp.employee_id = employee_info.employee_id
-
-
-
-
-
-
-
+JOIN employee_info on tmptmp.employee_id = employee_info.employee_id;

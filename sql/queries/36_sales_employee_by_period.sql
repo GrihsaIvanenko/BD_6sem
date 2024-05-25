@@ -17,5 +17,5 @@ JOIN
 WHERE 
     e.full_name = 'John Doe' 
 AND 
-    po.date BETWEEN '2021-01-01' AND '2023-01-01'
+    po.date BETWEEN '2021-01-01' AND '2023-01-01';
 

@@ -1,4 +1,4 @@
-CREATE TABLE "product" (
+CREATE TABLE IF NOT EXISTS "product" (
   "id" uuid PRIMARY KEY,
   "name" varchar(255),
   "company_name" varchar(255),
